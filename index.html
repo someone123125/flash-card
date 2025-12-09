@@ -1,57 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Flash Cards</title>
-<style>
-body { font-family: Arial; background:#111; color:white; margin:0; padding:20px; }
-.card { background:#222; padding:15px; border-radius:10px; margin:10px 0; cursor:pointer; }
-input, textarea { width:100%; padding:10px; margin:5px 0; border-radius:8px; border:none; }
-button { padding:10px 15px; border:none; background:#0af; border-radius:8px; cursor:pointer; color:white; font-weight:bold; }
-button:hover { background:#09c; }
-#cards { margin-top:20px; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flash Cards Trainer</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="page">
+    <header class="header">
+      <h1>Flash Cards Trainer</h1>
+      <p>Type your questions & answers, then flip through the deck and track your progress.</p>
+    </header>
 
-<h1>Flash Cards</h1>
+    <main class="layout">
+      <!-- Left: Create cards -->
+      <section class="panel">
+        <h2>Create a card</h2>
+        <div class="form">
+          <textarea id="questionInput" placeholder="Enter question..."></textarea>
+          <textarea id="answerInput" placeholder="Enter answer..."></textarea>
+          <button id="addBtn">Add card</button>
+        </div>
+        <p class="hint">Your cards are saved in this browser automatically.</p>
+      </section>
 
-<textarea id="q" placeholder="Question"></textarea>
-<textarea id="a" placeholder="Answer"></textarea>
-<button onclick="addCard()">Add Card</button>
+      <!-- Right: Study / progress -->
+      <section class="panel">
+        <h2>Study mode</h2>
 
-<div id="cards"></div>
+        <div class="card-area">
+          <div class="card-scene">
+            <div id="studyCard" class="card3d">
+              <div class="card-face card-front">
+                <div class="card-label" id="cardLabelFront">Question</div>
+                <div class="card-content" id="cardFrontText">
+                  Add your first card on the left to start studying.
+                </div>
+                <div class="card-index" id="cardIndexFront">0 / 0</div>
+              </div>
+              <div class="card-face card-back">
+                <div class="card-label">Answer</div>
+                <div class="card-content" id="cardBackText">
+                  The answer will appear here when you flip the card.
+                </div>
+                <div class="card-index" id="cardIndexBack">0 / 0</div>
+              </div>
+            </div>
+          </div>
+          <p class="flip-hint">Click the card or press “Flip” to see the answer.</p>
+        </div>
 
-<script>
-let cards = JSON.parse(localStorage.getItem("cards") || "[]");
-render();
+        <div class="controls">
+          <button id="prevBtn">◀ Prev</button>
+          <button id="flipBtn" class="primary">Flip</button>
+          <button id="nextBtn">Next ▶</button>
+        </div>
 
-function addCard(){
-    let q = document.getElementById("q").value.trim();
-    let a = document.getElementById("a").value.trim();
-    if(!q || !a) return;
+        <div class="progress">
+          <div class="progress-text" id="progressText">No cards yet.</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
-    cards.push({q,a});
-    localStorage.setItem("cards", JSON.stringify(cards));
-
-    document.getElementById("q").value="";
-    document.getElementById("a").value="";
-
-    render();
-}
-
-function render(){
-    let out = "";
-    cards.forEach((c,i)=>{
-        out += <div class='card' onclick='flip(${i})'>${c.q}</div>;
-    });
-    document.getElementById("cards").innerHTML = out;
-}
-
-function flip(i){
-    let show = prompt("Answer:", cards[i].a);
-}
-</script>
-
+  <script src="app.js"></script>
 </body>
 </html>
